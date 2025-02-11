@@ -1,12 +1,32 @@
 from rest_framework import serializers
-from .models import Booking
+from .models import Booking, Passenger
 from flights.serializer import FlightSerializer
 
 
-class BookingSerializer(serializers.ModelSerializer):
-    flight = FlightSerializer()
+class BookingCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Booking
-        fieadls = ['flight','first_name', 'last_name', 'document_number']
+        fieadls = ['flight']
         exclude = ['id']
 
+class BookingSerializer(serializers.ModelSerializer):
+    flight = FlightSerializer(read_only=True)
+
+    class Meta:
+        model = Booking
+        fieadls = '__all__'
+        exclude = []
+
+class PassengerCreateSerializer(serializers.ModelSerializer):
+     class Meta:
+        model = Passenger
+        fieadls = '__all__'
+        exclude = []
+
+class PassengerSerializer(serializers.ModelSerializer):
+     booking = BookingSerializer(read_only=True)
+     
+     class Meta:
+        model = Passenger
+        fieadls = '__all__'
+        exclude = []
