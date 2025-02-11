@@ -5,4 +5,4 @@ class AirportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Airport
         fiealds = ['name', 'iata']
-        exclude = ['data', 'city']
+        exclude = ['data', 'city', 'time']

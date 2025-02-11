@@ -9,5 +9,5 @@ class Airport(models.Model):
     time = models.TimeField()
 
     def __str__(self):
-        return super().__str__()
+        return self.airport
     

@@ -11,4 +11,12 @@ class RegistartionSerializer(serializers.Serializer):
         user = CustomUser.objects.create(username=validated_data["username"])
         user.set_password(password)
         user.save()
-        return user
+        return user 
+    
+class CustomUserSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    first_name = serializers.CharField(max_length=128)
+    last_name = serializers.CharField(max_length=128)
+    document_number = serializers.CharField(max_length=128)
+
+
