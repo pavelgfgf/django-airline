@@ -1,8 +1,8 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Passenger
-from .serializer import PassengerSerializer, PassengerCreateSerializer, BookingCreateSerializer
+from .models import Passenger, Booking
+from .serializer import PassengerSerializer, PassengerCreateSerializer, BookingCreateSerializer, BookingSerializer
 from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
@@ -30,3 +30,9 @@ class BookingList(APIView):
                 return Response(passenger_serializer.data, status=status.HTTP_201_CREATED)
             return Response(passenger_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(booking_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class BookingDetail(APIView):
+    def get(self, request, pk):
+        booking = Passenger.objects.get(pk=pk)
+        serializer = PassengerSerializer(booking)
+        return Response(serializer.data, status=status.HTTP_200_OK)

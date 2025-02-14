@@ -1,7 +1,5 @@
 from .models import Flight
 from .serializer import FlightSerializer
-from airport.models import Airport
-from airport.serializer import AirportSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -15,14 +13,13 @@ class FlightList(APIView):
     def get(self, request):
         fromi = request.GET.get('fromi') 
         to = request.GET.get('to') 
-        # date1 = request.GET.get('date1') 
-        # date2 = request.GET.get('date2')
+        date = request.GET.get('date') 
         # passengers = request.GET.get('passenger') 
 
         # Если есть query параметры print в консоль, если нет тогда выполнить код ниже
         if fromi and to:
             flights = Flight.objects.filter(
-                Q(fromi__iata=fromi) & Q(to__iata=to)
+                Q(fromi__iata=fromi) & Q(to__iata=to) & Q(flight_date__date=date)
             )
             serializer = FlightSerializer(flights, many=True)
             return Response({'items': serializer.data}, status=status.HTTP_200_OK)

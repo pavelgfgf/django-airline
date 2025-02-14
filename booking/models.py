@@ -12,6 +12,7 @@ class Booking(models.Model):
 class Passenger(models.Model):
     first_name = models.CharField(max_length=128)
     last_name = models.CharField(max_length=128)
+    data_birth = models.DateField(null=True, blank=True)
     document_number = models.CharField(max_length=128)
     booking = models.ForeignKey(Booking, related_name='passenger_booking', on_delete=models.CASCADE, null=True)
 

@@ -5,12 +5,14 @@ from .models import Flight, Airport
 class AirportSerializer(serializers.ModelSerializer):
     class Meta: 
         model = Airport
-        fiealds = '__all__'
+        fiealds = ['iata', 'date', 'city']
         exclude = []
 
 class FlightSerializer(serializers.ModelSerializer):
     fromi = AirportSerializer(read_only=True)
     to = AirportSerializer(read_only=True)
+    date = AirportSerializer(read_only=True)
+    
     class Meta: 
         model = Flight
         fiealds = '__all__'
