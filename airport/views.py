@@ -19,3 +19,4 @@ class AirportList(APIView):
             airports = Airport.objects.all()
         serializer = AirportSerializer(airports, many=True)
         return Response({'data': {'items': serializer.data}}, status=status.HTTP_200_OK)
+    

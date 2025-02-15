@@ -2,12 +2,13 @@ from django.db import models
 
 # Create your models here.
 class Airport(models.Model):
-    city = models.CharField(max_length=128)
-    airport = models.CharField(max_length=128)
-    iata = models.CharField(max_length=3, unique=True)
-    date = models.DateField()
-    time = models.TimeField()
+    city = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+    iata = models.CharField(max_length=255)
+    created_at = models.DateTimeField(blank=True, null=True)
+    updated_at = models.DateTimeField(blank=True, null=True)
 
-    def __str__(self):
-        return self.airport
+    class Meta:
+        managed = False
+        db_table = 'airports'
     
