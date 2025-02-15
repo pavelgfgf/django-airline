@@ -86,6 +86,11 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173'
 ]
 
+ACCOUNT_AUTHENTICATION_METHOD = 'phone'  # Используем phone для аутентификации
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None  # Отключаем username
+ACCOUNT_EMAIL_REQUIRED = False  # Отключаем email, если он не нужен
+ACCOUNT_USERNAME_REQUIRED = False  # Отключаем username
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -112,9 +117,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # or 'postgresql', 'sqlite3', etc.
         'NAME': 'airlines',
-        'USER': 'antoxa',
-        'PASSWORD': 'rootpassword',
-        'HOST': '127.0.0.1',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',
         'PORT': '3306',  # or '5432' for PostgreSQL
     }
 }
