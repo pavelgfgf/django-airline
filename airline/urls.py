@@ -34,5 +34,12 @@ urlpatterns = [
     path('api/flights', FlightList.as_view()),
     path('api/register', Registration.as_view()),
     path('api/user', UserProfile.as_view()),
-    path('api/booking', BookingViewSet.as_view({'post': 'create'}), name='booking-create'),
+    path(
+        'api/booking',
+        BookingViewSet.as_view({'post': 'create',}),
+    ),
+    path(
+        'api/booking/<str:pk>/',
+        BookingViewSet.as_view({'get': 'retrieve',}),
+    ),
 ]
