@@ -18,11 +18,6 @@ class CreatePassengerModelSerializer(serializers.ModelSerializer):
         model = Passenger
         fields = ["first_name", "last_name", "birth_date", "document_number"]
 
-    def validate(self, data):
-        if not data:
-            ValueError("Список пассажиров пуст")
-        return data
-
 
 class FlightModelSerializer(serializers.Serializer):
     id = serializers.IntegerField()
@@ -48,28 +43,42 @@ class CreateBookingModelSerializer(serializers.ModelSerializer):
         fields = ("passengers", "flight_from", "flight_back", "code")
         read_only_fields = ("code", )
 
+    def validate_passengers(self, passengers):
+        if len(passengers) > 8:
+            raise serializers.ValidationError("Слишком много пассажиров в бронировании")
+        if not passengers:
+            raise serializers.ValidationError("Список пассажиров пуст")
+        return passengers
+
+    def validate_flight_from(self, flight_from_data):
+        passengers = len(self.initial_data.get('passengers'))
+        flight_from_instance = Flight.objects.filter(id=flight_from_data["id"]).first()
+        if not flight_from_instance:
+            raise serializers.ValidationError(f"Рейса с id {flight_from_data['id']} нет в базе")
+        if flight_from_instance.get_availability_for_date(flight_from_data["date"]) < passengers:
+            raise serializers.ValidationError(f"В выбранном рейсе {flight_from_data} не свободных хватает мест")
+        return flight_from_data
+
+    def validate_flight_back(self, flight_back_data):
+        passengers = len(self.initial_data.get('passengers'))
+        if flight_back_data:
+            flight_back_instance = Flight.objects.filter(id=flight_back_data["id"]).first()
+            if not flight_back_instance:
+                raise serializers.ValidationError(f"Рейса с id {flight_back_data['id']} нет в базе")
+
+            if flight_back_instance.get_availability_for_date(flight_back_data["date"]) < passengers:
+                raise serializers.ValidationError(f"В выбранном рейсе {flight_back_data} не свободных хватает мест")
+        return flight_back_data
+
     def create(self, validated_data):
         passengers_data = validated_data.pop("passengers")
         flight_from_data = validated_data.pop("flight_from")
         flight_back_data = validated_data.pop("flight_back")
 
-        if len(passengers_data) > 8:
-            ValueError("Слишком много пассажиров в бронировании")
-
         flight_from_instance = Flight.objects.filter(id=flight_from_data["id"]).first()
-        if not flight_from_instance:
-            raise ValueError(f"Рейса с id {flight_from_data['id']} нет в базе")
-        if flight_from_instance.get_availability_for_date(flight_from_data["date"]) < len(passengers_data):
-            raise ValueError(f"В выбранном рейсе {flight_from_data} не свободных хватает мест")
-
         flight_back_instance = None
         if flight_back_data:
             flight_back_instance = Flight.objects.filter(id=flight_back_data["id"]).first()
-            if not flight_back_instance:
-                raise ValueError(f"Рейса с id {flight_back_data['id']} нет в базе")
-
-            if flight_back_instance.get_availability_for_date(flight_back_data["date"]) < len(passengers_data):
-                raise ValueError(f"В выбранном рейсе {flight_back_data} не свободных хватает мест")
 
         code = generate_unique_code()
         for i in range(5):
