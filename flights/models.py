@@ -1,6 +1,10 @@
 from django.db import models
 from airport.models import Airport
 
+
+FLIGHT_CAPACITY = 20
+
+
 # Create your models here.
 class Flight(models.Model):
     flight_code = models.CharField(max_length=10)
@@ -15,3 +19,7 @@ class Flight(models.Model):
     class Meta:
         managed = False
         db_table = 'flights'
+
+    def get_availability_for_date(self, date):
+        return (FLIGHT_CAPACITY -
+                len(self.booking_set.filter(date_from=date)) - len(self.bookings_flight_back_set.filter(date_back=date)))

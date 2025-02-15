@@ -16,14 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from airport.views import AirportList
-from flights.views import FlightList
-from authorization.views import Registration, UserProfile
-from booking.views import BookingList, BookingDetail
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+
+from airport.views import AirportList
+from authorization.views import Registration, UserProfile
+from booking.views import BookingViewSet
+from flights.views import FlightList
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,8 +32,7 @@ urlpatterns = [
     path('api/token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/airports', AirportList.as_view()),
     path('api/flights', FlightList.as_view()),
-    path('api/booking', BookingList.as_view()),
-    path('api/booking/<int:pk>', BookingDetail.as_view()),
-    path('api/registration', Registration.as_view()),
+    path('api/register', Registration.as_view()),
     path('api/user', UserProfile.as_view()),
+    path('api/booking', BookingViewSet.as_view({'post': 'create'}), name='booking-create'),
 ]

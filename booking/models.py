@@ -1,5 +1,7 @@
 from django.db import models
+
 from flights.models import Flight
+
 
 # Create your models here.        
 class Booking(models.Model):
@@ -14,6 +16,7 @@ class Booking(models.Model):
     class Meta:
         managed = False
         db_table = 'bookings'
+
 
 class Passenger(models.Model):
     booking = models.ForeignKey(Booking, models.DO_NOTHING)

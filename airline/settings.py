@@ -72,6 +72,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PARSER_CLASSES': (
         'djangorestframework_camel_case.parser.CamelCaseJSONParser',
     ),
+    'EXCEPTION_HANDLER': 'airline.utils.custom_exception_handler',
 }
 
 ROOT_URLCONF = 'airline.urls'
@@ -111,9 +112,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # or 'postgresql', 'sqlite3', etc.
         'NAME': 'airlines',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
+        'USER': 'antoxa',
+        'PASSWORD': 'rootpassword',
+        'HOST': '127.0.0.1',
         'PORT': '3306',  # or '5432' for PostgreSQL
     }
 }
