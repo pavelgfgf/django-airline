@@ -6,7 +6,7 @@ from flights.serializer import FlightSerializer
 class BookingCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Booking
-        fieadls = ['flight']
+        fiedls = ['flight']
         exclude = ['id']
 
 class BookingSerializer(serializers.ModelSerializer):
@@ -14,13 +14,13 @@ class BookingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Booking
-        fieadls = '__all__'
+        fiedls = '__all__'
         exclude = []
 
 class PassengerCreateSerializer(serializers.ModelSerializer):
      class Meta:
         model = Passenger
-        fieadls = '__all__'
+        fiedls = '__all__'
         exclude = []
 
 class PassengerSerializer(serializers.ModelSerializer):
@@ -28,5 +28,5 @@ class PassengerSerializer(serializers.ModelSerializer):
      
      class Meta:
         model = Passenger
-        fieadls = '__all__'
+        fiedls = '__all__'
         exclude = []

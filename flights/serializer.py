@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from .models import Flight, Airport
-from datetime import datetime
 
 class AirportSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,6 +19,9 @@ class FlightSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
+        print(self.context)
+        cost = self.context.get('passengers', None) * instance.cost if self.context.get('passengers', None) is not None else instance.cost
+        representation['cost'] = cost
         representation['from'] = {
             "city": instance.from_field.city,
             "airport": instance.from_field.name,

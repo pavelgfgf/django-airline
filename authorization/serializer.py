@@ -13,10 +13,10 @@ class RegistartionSerializer(serializers.Serializer):
         user.save()
         return user 
     
-class CustomUserSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    first_name = serializers.CharField(max_length=128)
-    last_name = serializers.CharField(max_length=128)
-    document_number = serializers.CharField(max_length=128)
+class CustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'first_name', 'last_name', 'phone' , 'document_number']
+
 
 

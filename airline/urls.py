@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from airport.views import AirportList
 from flights.views import FlightList
-from authorization.views import Registration
+from authorization.views import Registration, UserProfile
 from booking.views import BookingList, BookingDetail
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -34,4 +34,5 @@ urlpatterns = [
     path('api/booking', BookingList.as_view()),
     path('api/booking/<int:pk>', BookingDetail.as_view()),
     path('api/registration', Registration.as_view()),
+    path('api/user', UserProfile.as_view()),
 ]

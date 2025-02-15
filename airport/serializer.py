@@ -4,5 +4,5 @@ from .models import Airport
 class AirportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Airport
-        fiealds = ['name', 'iata', 'date']
+        fields = ['name', 'iata', 'date']
         exclude = ['city', 'time']
