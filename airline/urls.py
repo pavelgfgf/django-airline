@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from airport.views import AirportList
-from flights.views import FlightList, FlightDetail
+from flights.views import FlightList
 from authorization.views import Registration
 from booking.views import BookingList, BookingDetail
 from rest_framework_simplejwt.views import (
@@ -31,7 +31,6 @@ urlpatterns = [
     path('api/token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/airports', AirportList.as_view()),
     path('api/flights', FlightList.as_view()),
-    path('api/flights/<int:pk>', FlightDetail.as_view()),
     path('api/booking', BookingList.as_view()),
     path('api/booking/<int:pk>', BookingDetail.as_view()),
     path('api/registration', Registration.as_view()),

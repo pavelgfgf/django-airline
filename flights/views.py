@@ -11,53 +11,19 @@ from rest_framework.permissions import IsAuthenticated
 class FlightList(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
-        fromi = request.GET.get('fromi') 
-        to = request.GET.get('to') 
-        date = request.GET.get('date') 
-        # passengers = request.GET.get('passenger') 
+        departure = request.GET.get('from') 
+        arrival = request.GET.get('to') 
+        date_1 = request.GET.get('date1')
+        date_2 = request.GET.get('date2')
+        passengers = request.GET.get('passenger') 
 
-        # Если есть query параметры print в консоль, если нет тогда выполнить код ниже
-        if fromi and to:
-            flights = Flight.objects.filter(
-                Q(fromi__iata=fromi) & Q(to__iata=to) & Q(flight_date__date=date)
+        flights_to = Flight.objects.filter(
+                Q(from_field__iata=departure) & Q(to__iata=arrival)
             )
-            serializer = FlightSerializer(flights, many=True)
-            return Response({'items': serializer.data}, status=status.HTTP_200_OK)
-        else: 
-            flights = Flight.objects.all()
-            serializer = FlightSerializer(flights, many=True)
-            return Response({"items": serializer.data}, status=status.HTTP_200_OK)
+        serializer_to = FlightSerializer(flights_to, many=True, context={"date": date_1})
 
-    def post(self, request):
-        serializer = FlightSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-class FlightDetail(APIView):
-    permission_classes = [IsAuthenticated]
-    def get_object(self, pk):
-        try:
-            return Flight.objects.get(pk=pk)
-        except Flight.DoesNotExist:
-            raise status.HTTP_404_NOT_FOUND
-        
-    def get(self, request, pk):
-        flight = self.get_object(pk)
-        serializer = FlightSerializer(flight)
-        return Response(serializer.data)
-    
-    def put(self, request, pk):
-        flight = self.get_object(pk)
-        serializer = FlightSerializer(flight, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    def delete(self, request, pk):
-        flight = self.get_object(pk)
-        flight.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
+        flights_back = Flight.objects.filter(
+                Q(from_field__iata=arrival) & Q(to__iata=departure)
+            )
+        serializer_back = FlightSerializer(flights_back if date_2 else [], many=True, context={"date": date_2, "passengers": passengers})
+        return Response({"data": { "flight_to": serializer_to.data, "flights_back": serializer_back.data }})
