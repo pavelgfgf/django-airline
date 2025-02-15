@@ -19,3 +19,4 @@ class UserProfile(APIView):
         profile = CustomUser.objects.all()
         serializer = CustomUserSerializer(profile, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
