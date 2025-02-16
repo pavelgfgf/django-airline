@@ -6,6 +6,7 @@ from django.db import transaction
 from rest_framework import serializers
 
 from flights.models import Flight
+from flights.serializer import FlightSerializer
 from .models import Booking, Passenger
 
 
@@ -21,7 +22,7 @@ class CreatePassengerModelSerializer(serializers.ModelSerializer):
 
 class FlightModelSerializer(serializers.Serializer):
     id = serializers.IntegerField()
-    date = serializers.DateField()
+    date = serializers.DateField(required=False)
 
     class Meta:
         model = Flight
@@ -105,6 +106,26 @@ class CreateBookingModelSerializer(serializers.ModelSerializer):
 
 
 class RetrieveBookingSerializer(serializers.ModelSerializer):
+    flight_from = FlightSerializer()
+    flight_back = FlightSerializer()
+
     class Meta:
         model = Booking
-        fields = ("code",)
+        fields = ("code", "flight_from", "flight_back", "date_from", "date_back")
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+
+        flight_from_data = FlightSerializer(instance.flight_from, context={"date": representation["date_from"]}).data
+        flight_back_data = FlightSerializer(instance.flight_back, context={"date": representation["date_back"]}).data
+
+        flights = []
+        if representation.get("flight_from"):
+            flights.append(flight_from_data)
+        if representation.get("flight_back"):
+            flights.append(flight_back_data)
+
+        representation["flights"] = flights
+        representation.pop("flight_from", None)
+        representation.pop("flight_back", None)
+        return representation
