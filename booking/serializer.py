@@ -74,7 +74,7 @@ class CreateBookingModelSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         passengers_data = validated_data.pop("passengers")
         flight_from_data = validated_data.pop("flight_from")
-        flight_back_data = validated_data.pop("flight_back")
+        flight_back_data = validated_data.pop("flight_back", None)
 
         flight_from_instance = Flight.objects.filter(id=flight_from_data["id"]).first()
         flight_back_instance = None
