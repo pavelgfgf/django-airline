@@ -10,12 +10,13 @@ from rest_framework.permissions import IsAuthenticated
 
 class FlightList(APIView):
     permission_classes = [IsAuthenticated]
+
     def get(self, request):
         departure = request.GET.get('from') 
         arrival = request.GET.get('to') 
         date_1 = request.GET.get('date1')
         date_2 = request.GET.get('date2')
-        passengers = request.GET.get('passengers') 
+        passengers = request.GET.get('passengers')
 
         flights_to = Flight.objects.filter(
                 Q(from_field__iata=departure) & Q(to__iata=arrival)
@@ -26,4 +27,4 @@ class FlightList(APIView):
                 Q(from_field__iata=arrival) & Q(to__iata=departure)
             )
         serializer_back = FlightSerializer(flights_back if date_2 else [], many=True, context={"date": date_2, "passengers": int(passengers)})
-        return Response({"data": { "flight_to": serializer_to.data, "flights_back": serializer_back.data }})
+        return Response({"data": { "flights_to": serializer_to.data, "flights_back": serializer_back.data }})

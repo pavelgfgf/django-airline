@@ -1,6 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 from booking.models import Booking
 from booking.serializer import CreateBookingModelSerializer, RetrieveBookingSerializer
@@ -8,6 +9,7 @@ from booking.serializer import CreateBookingModelSerializer, RetrieveBookingSeri
 
 class BookingViewSet(viewsets.ModelViewSet):
     queryset = Booking.objects.all()
+    permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
         if self.action == "create":

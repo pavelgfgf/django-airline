@@ -57,7 +57,7 @@ class CreateBookingModelSerializer(serializers.ModelSerializer):
         if not flight_from_instance:
             raise serializers.ValidationError(f"Рейса с id {flight_from_data['id']} нет в базе")
         if flight_from_instance.get_availability_for_date(flight_from_data["date"]) < passengers:
-            raise serializers.ValidationError(f"В выбранном рейсе {flight_from_data} не свободных хватает мест")
+            raise serializers.ValidationError(f"В выбранном рейсе {flight_from_data} нет свободных хватает мест")
         return flight_from_data
 
     def validate_flight_back(self, flight_back_data):
@@ -68,7 +68,7 @@ class CreateBookingModelSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(f"Рейса с id {flight_back_data['id']} нет в базе")
 
             if flight_back_instance.get_availability_for_date(flight_back_data["date"]) < passengers:
-                raise serializers.ValidationError(f"В выбранном рейсе {flight_back_data} не свободных хватает мест")
+                raise serializers.ValidationError(f"В выбранном рейсе {flight_back_data} нет свободных хватает мест")
         return flight_back_data
 
     def create(self, validated_data):
